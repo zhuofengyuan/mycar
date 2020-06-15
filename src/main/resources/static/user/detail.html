@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>小米6立即购买-小米商城</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/iconfont.css">
+  <link rel="stylesheet" href="css/swiper.min.css">
+  <link rel="stylesheet" href="stylus/detail.css">
+</head>
+<body>
+
+<header id="header">
+  <div class="center">
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <a href="/user/qingbao" class="username">汽车情报站</a>
+      </div>
+      <div class="user">
+        <a href="/user/index" class="username">选车</a>
+      </div>
+      <div class="user">
+        <a href="/user/youhui" class="username">新车优惠</a>
+      </div>
+    </div>
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <ul class="selector">
+          <li>
+            <a href="/user/personal">
+              个人中心
+            </a>
+          </li>
+
+          <li>
+            <a href="/user/logins">
+              退出登录
+            </a>
+          </li>
+        </ul>
+        <a href="javascript:;" class="username">
+          <span id="userName"></span>
+          <i class="iconfont">&#xe616;</i>
+        </a>
+      </div>
+      <ul id="isLogin">
+        <li><a href="">登录</a></li>
+        <li><a href="">注册</a></li>
+      </ul>
+      <div class="shopcart">
+        <i class="iconfont icon-cart"></i>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+<div id="detail">
+<!--  <nav id="nav">-->
+<!--    <div class="banner_x center">-->
+
+<!--      <ul class="list">-->
+<!--        <li><a href="/user/qingbao">汽车情报站</a></li>-->
+<!--        <li><a href="/user/index">选车</a></li>-->
+<!--        <li><a href="/user/youhui">新车优惠</a></li>-->
+<!--      </ul>-->
+
+<!--    </div>-->
+<!--  </nav>-->
+
+  <div class="xiangqing">
+    <div class="neirong w">
+      <div class="xiaomi6 fl" id="name3">奔驰AMG</div>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <div class="jieshao mt20 w clearfix">
+    <div class="left fl" style="position: relative;">
+      <div class="hiddenbox">
+      </div>
+      <img src="./image/detail/123321.jpg" id="img" style="height: 560px">
+      <div class="smallbox"></div>
+      <div class="bigbox">
+        <img src="./image/detail/123321.jpg" id="img2">
+      </div>
+      <div class="swiper-container swiper-container-horizontal">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide active">
+            <img src="./image/detail/123321.jpg" alt="" id="img3">
+          </div>
+        </div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next" style="background-color:#fff;height:100%"></div>
+        <div class="swiper-button-prev swiper-button-disabled" style="background-color:#fff;height:100%"></div>
+      </div>
+    </div>
+    <div class="right fr">
+      <div class="h3 ml20 mt20" id="name">奔驰AMG A 35 L</div>
+      <div class="jianjie mr40 ml20 mt10" id="description">
+        AMG A 35 L运动轿车，新车基于现款奔驰A级而来，轴距较三厢版AMG A 35加长了60mm达到2789mm。动力方面，它将使用一台2.0T发动机，最大功率306马力，最大扭矩400牛·米，与发动机匹配的是7速双离合变速箱，官方给出的0-100km/h加速时间为4.9秒，比标准轴距版车型略慢。其主要竞品为奥迪S3、宝马M140i等车型。除此之外，AMG A 35 L运动轿车将采用国产形式由北京奔驰进行生产，但动力总成仍将由德国Kölleda工厂生产。
+      </div>
+      <div class="jiage ml20 mt10" id="price">39.98万</div>
+
+      <div class="xzbb ml20 mt10">
+
+      </div>
+      <div class="xqxq mt20 ml20">
+        <div class="top1 mt10">
+          <div class="left1 fl" id="name2">奔驰AMG A 35 L</div>
+          <div class="right1 fr" id="price2">399800元</div>
+          <div class="clear"></div>
+        </div>
+        <div class="bot mt20 ft20 ftbc" id="price3">总计：399800元</div>
+      </div>
+      <div class="xiadan ml20 mt20">
+        <input class="jrgwc" type="button" name="jrgwc" value="立即选购" onclick="byCar()" />
+        <!--<input class="jrgwc" type="button" name="jrgwc" value="加入购物车"/>-->
+
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<script src="js/index.js"></script>
+<script src="js/swiper.min.js"></script>
+<script src="../public/libs/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        var isLogin=sessionStorage.getItem("userName");
+        if (isLogin==null || isLogin==""){
+        }else {
+            $("#userName").html("欢迎您:"+isLogin);
+            $("#isLogin").css("display","none");
+            $("#out").css("display","block");
+        }
+
+      $.ajax({
+        type: "get",
+        url: "/sys/product/p/" + getQueryVariable("id"),
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        async: false,
+        success: function (result) {
+          var product = result.product;
+          $("#name").text(product.name)
+          $("#name2").text(product.name)
+          $("#name3").text(product.name)
+          $("#price").text(product.price + "元")
+          $("#price2").text(product.price + "元")
+          $("#price3").text("总计：" + product.price + "元")
+          $("#description").text(product.description)
+
+          $("#img").attr("src", "/back-img/" + product.img)
+          $("#img2").attr("src", "/back-img/" + product.img)
+          $("#img3").attr("src", "/back-img/" + product.img)
+
+          new Swiper('.swiper-container', {
+            slidesPerView: 5,
+            centeredSlides: false,
+            spaceBetween: 30,
+            pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+            },
+            navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+          });
+        }
+      })
+    })
+
+    function byCar() {
+      window.location.href="/user/settlement";
+  }
+
+    function getQueryVariable(variable)
+    {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){return pair[1];}
+      }
+      return(false);
+    }
+</script>
+</body>
+</html>

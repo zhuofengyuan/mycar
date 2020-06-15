@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人中心</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="stylus/personal.css">
+
+</head>
+<style>
+  .but{
+    border: none;
+    width: 240px;
+    height: 45px;
+    margin-left: 55px;
+    background: #ff6700;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .inp{
+    width: 220px;
+    height: 30px;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+  }
+</style>
+<body>
+
+<header id="header" >
+  <div class="center">
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <a href="/user/index.html" class="username">首页</a>
+      </div>
+      <div class="user">
+        <a href="/user/qingbao" class="username">汽车情报站</a>
+      </div>
+      <div class="user">
+        <a href="/user/index" class="username">选车</a>
+      </div>
+      <div class="user">
+        <a href="/user/youhui" class="username">新车优惠</a>
+      </div>
+    </div>
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <ul class="selector">
+          <li>
+            <a href="/user/personal">
+              个人中心
+            </a>
+          </li>
+
+          <li>
+            <a href="/user/logins">
+              退出登录
+            </a>
+          </li>
+        </ul>
+        <a href="javascript:;" class="username" >
+          <span id="userName"></span>
+          <i class="iconfont icon-jiantou_xiangxia1"></i>
+        </a>
+      </div>
+      <ul class="login" id="isLogin">
+        <li><a href="/user/logins">登录</a></li>
+        <li><a href="/user/regist">注册</a></li>
+      </ul>
+
+    </div>
+  </div>
+</header>
+
+<!--<nav id="nav">-->
+<!--  <div class="banner_x center">-->
+
+<!--    <ul class="list">-->
+
+<!--    </ul>-->
+
+<!--  </div>-->
+<!--</nav>-->
+
+<!-- personal -->
+<div id="personal">
+  <div class="selfinfo center">
+    <div class="lfnav fl">
+
+      <div class="ddzx">个人中心</div>
+      <div class="subddzx">
+        <ul>
+          <li><a href="./personal.html" >我的个人中心</a></li>
+          <li><a href="./updatel.html" style="color:#ff6700;font-weight:bold;">修改密码</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rtcont fr">
+      <div class="grzlbt ml40">修改密码</div>
+<!--      <div class="subgrzl ml40"><span>用户名</span>-->
+<!--        <input class="inp" id="username" type="text" placeholder="请输入用户名"/>-->
+
+<!--      </div>-->
+      <div class="subgrzl ml40"><span>当前密码</span>
+        <input class="inp" id="oldPass" type="password" placeholder="请输入旧密码"/>
+
+      </div>
+      <div class="subgrzl ml40"><span>新密码</span>
+        <input class="inp" id="newPass" type="password" placeholder="请输入新密码"/>
+      </div>
+      <div class="subgrzl ml40"><span>确认密码</span>
+        <input class="inp" type="password" id="okPass" placeholder="请输入确认密码"/>
+      </div>
+      <div class="login_submit" >
+        <input class="submit but" type="button" value="修改密码" onclick="update()">
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+</body>
+</html>
+<script src="../public/libs/jquery.min.js"></script>
+<script>
+  $(function () {
+    var isLogin=sessionStorage.getItem("userName");
+    if (isLogin==null || isLogin==""){
+      alert("请先登录");
+      window.location.href="/user/logins";
+    }else {
+      $("#userName").html("欢迎您:"+isLogin);
+      $("#isLogin").css("display","none");
+      $("#out").css("display","block");
+    }
+  })
+  
+  function update() {
+    var oldPass=$("#oldPass").val();
+    var newPass=$("#newPass").val();
+    var okPass=$("#okPass").val();
+      var isLogin=sessionStorage.getItem("userName");
+    if (okPass!=newPass){
+        alert("两次密码输入不一致，请重新输入");
+        return false;
+    }
+      $.ajax({
+          type: "get",
+          url: "/user/login",
+          data: {"userName":isLogin,"password":oldPass},
+          dataType: "json",
+          contentType: "application/json",
+          cache: false,
+          success: function(result){
+              if (result.result=="ok"){
+
+                  $.ajax({
+                      type: "get",
+                      url: "/user/updatePass",
+                      data: {"userName":isLogin,"password":okPass},
+                      dataType: "json",
+                      contentType: "application/json",
+                      cache: false,
+                      success: function(result){
+                          if (result  =="ok"){
+                              alert("修改成功,请重新登录")
+                              window.location.href="/user/logins";
+                          } else {
+                              alert("修改失败");
+                          }
+                      }
+                  });
+
+
+
+              } else {
+                  alert("原始密码输入不正确，请重新输入");
+              }
+          }
+      });
+
+
+  }
+</script>
