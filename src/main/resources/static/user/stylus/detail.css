@@ -406,7 +406,7 @@
   color: #ff6700;
 }
 #detail .jieshao .right .xqxq {
-  height: 80px;
+  height: 110px;
   width: 555px;
   background: #fff;
   padding: 20px;
@@ -442,4 +442,23 @@
 }
 #footer p {
   height: 30px;
+}
+
+.btn-qty{
+  height: 20px;
+  width: 20px;
+  border: none;
+  background: #ff6700;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.inp{
+  width: 40px;
+  height: 30px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
 }

@@ -47,7 +47,7 @@
         <li><a href="">登录</a></li>
         <li><a href="">注册</a></li>
       </ul>
-      <div class="shopcart">
+      <div class="shopcart" onclick="window.location.href = 'cart.html'">
         <i class="iconfont icon-cart"></i>
 
       </div>
@@ -112,11 +112,15 @@
           <div class="clear"></div>
         </div>
         <div class="bot mt20 ft20 ftbc" id="price3">总计：399800元</div>
+        <div class="bot mt20 ft20 ftbc">
+          <input class="btn-qty" type="button" name="jrgwc" value="+" id="add"/>
+          <input class="inp" type="text" name="jrgwc" id="qty" value="1"/>
+          <input class="btn-qty" type="button" name="jrgwc" value="-" id="sub"/>
+        </div>
       </div>
       <div class="xiadan ml20 mt20">
         <input class="jrgwc" type="button" name="jrgwc" value="立即选购" onclick="byCar()" />
-        <!--<input class="jrgwc" type="button" name="jrgwc" value="加入购物车"/>-->
-
+        <input class="jrgwc" type="button" name="jrgwc" value="加入购物车"/>
       </div>
     </div>
     <div class="clear"></div>
@@ -136,6 +140,20 @@
             $("#isLogin").css("display","none");
             $("#out").css("display","block");
         }
+
+      $("#add").click(function(){
+        var i = Number($("#qty").val());
+        $("#qty").val(i + 1)
+      });
+
+      $("#sub").click(function(){
+        var i = Number($("#qty").val());
+        if(i <= 1){
+          $("#qty").val(1)
+        } else {
+          $("#qty").val(i - 1)
+        }
+      });
 
       $.ajax({
         type: "get",
@@ -176,7 +194,8 @@
     })
 
     function byCar() {
-      window.location.href="/user/settlement";
+      var url = "/user/settlement.html?id=" + getQueryVariable("id") + "&qty=" + $("#qty").val();
+      window.location.href = url;
   }
 
     function getQueryVariable(variable)
