@@ -85,10 +85,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int selectAll(SysUser user) {
+    public List<CartItem> selectAll(SysUser user) {
         CartExample e = new CartExample();
         e.createCriteria().andUseridEqualTo(Integer.parseInt(user.getUserId().toString()));
         Cart c = this.cartMapper.selectByExample(e).get(0);
-        return 1;
+        CartItemExample ex = new CartItemExample();
+        ex.createCriteria().andCartIdEqualTo(c.getId());
+        return this.cartItemMapper.selectByExample(ex);
     }
 }

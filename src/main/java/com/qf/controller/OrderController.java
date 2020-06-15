@@ -49,8 +49,7 @@ public class OrderController {
      */
     @GetMapping("/list")
     public @ResponseBody R list(String username){
-        this.orderService.selectAll(sysUserService.findByUsername(username));
-        return R.ok();
+        return R.ok().put("list", this.orderService.selectAll(sysUserService.findByUsername(username)));
     }
 }
 
