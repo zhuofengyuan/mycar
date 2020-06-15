@@ -16,6 +16,7 @@ import org.springframework.transaction.TransactionStatus;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -88,9 +89,10 @@ public class OrderServiceImpl implements OrderService {
     public List<CartItem> selectAll(SysUser user) {
         CartExample e = new CartExample();
         e.createCriteria().andUseridEqualTo(Integer.parseInt(user.getUserId().toString()));
-        Cart c = this.cartMapper.selectByExample(e).get(0);
+        List<Cart> c = this.cartMapper.selectByExample(e);
+        List<Integer> ids = c.stream().map(Cart::getId).collect(Collectors.toList());
         CartItemExample ex = new CartItemExample();
-        ex.createCriteria().andCartIdEqualTo(c.getId());
+        ex.createCriteria().andCartIdIn(ids);
         return this.cartItemMapper.selectByExample(ex);
     }
 }
