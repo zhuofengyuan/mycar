@@ -1,5 +1,7 @@
 package com.qf.controller;
 
+import com.qf.pojo.CartItemExample;
+import com.qf.service.CartService;
 import com.qf.service.OrderService;
 import com.qf.service.SysUserService;
 import com.qf.utils.R;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -19,14 +22,18 @@ public class OrderController {
     OrderService orderService;
     @Autowired
     SysUserService sysUserService;
+    @Autowired
+    CartService cartService;
 
     /**
      * 根据购物车新增订单
      * @return
      */
     @GetMapping("/add/cart")
-    public @ResponseBody R addCart(List<Integer> ids, String username){
+    public @ResponseBody R addCart(@RequestParam("ids[]") List<Integer> ids, String username){
         this.orderService.insertByCartItem(ids, sysUserService.findByUsername(username));
+        CartItemExample e = new CartItemExample();
+        this.cartService.deleteByExample(e);
         return R.ok();
     }
 

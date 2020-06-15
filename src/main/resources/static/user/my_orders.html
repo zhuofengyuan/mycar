@@ -9,19 +9,62 @@
 <body>
 
 <header id="header">
+  <div class="center">
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <a href="/user/index.html" class="username">首页</a>
+      </div>
+      <div class="user">
+        <a href="/user/qingbao" class="username">汽车情报站</a>
+      </div>
+      <div class="user">
+        <a href="/user/index" class="username">选车</a>
+      </div>
+      <div class="user">
+        <a href="/user/youhui" class="username">新车优惠</a>
+      </div>
+    </div>
+    <div class="fr" style="position: relative;">
+      <div class="user">
+        <ul class="selector">
+          <li>
+            <a href="/user/personal">
+              个人中心
+            </a>
+          </li>
 
+          <li>
+            <a href="/user/logins">
+              退出登录
+            </a>
+          </li>
+        </ul>
+        <a href="javascript:;" class="username" >
+          <span id="userName"></span>
+          <i class="iconfont icon-jiantou_xiangxia1"></i>
+        </a>
+      </div>
+      <ul class="login" id="isLogin">
+        <li><a href="/user/logins">登录</a></li>
+        <li><a href="/user/regist">注册</a></li>
+      </ul>
+      <div class="shopcart" onclick="window.location.href = 'cart.html'">
+        <i class="iconfont icon-cart"></i>
+      </div>
+    </div>
+  </div>
 </header>
 
-<nav id="nav">
-  <div class="banner_x center">
-    <ul class="list">
-      <li><a href="/user/qingbao">汽车情报站</a></li>
-      <li><a href="/user/index">选车</a></li>
-      <li><a href="/user/youhui">新车优惠</a></li>
-    </ul>
+<!--<nav id="nav">-->
+<!--  <div class="banner_x center">-->
+<!--    <ul class="list">-->
+<!--      <li><a href="/user/qingbao">汽车情报站</a></li>-->
+<!--      <li><a href="/user/index">选车</a></li>-->
+<!--      <li><a href="/user/youhui">新车优惠</a></li>-->
+<!--    </ul>-->
 
-  </div>
-</nav>
+<!--  </div>-->
+<!--</nav>-->
 
 <div id="personal">
   <div class="selfinfo center">
@@ -66,3 +109,41 @@
 
 </body>
 </html>
+<script src="../public/libs/jquery.min.js"></script>
+<script>
+
+  $(function () {
+    var isLogin=sessionStorage.getItem("userName");
+    if (isLogin==null || isLogin==""){
+      alert("请先登录");
+      window.location.href="/user/logins";
+    }else {
+      $.ajax({
+        type: "get",
+        url: "/user/userInfo",
+        data: {"userName":isLogin},
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        success: function(result){
+          $("#userName").html("欢迎您:"+isLogin);
+          $("#isLogin").css("display","none");
+          $("#out").css("display","block");
+        }
+      });
+    }
+
+    $.ajax({
+      type: "get",
+      url: "/order/list",
+      data: {"username":isLogin},
+      dataType: "json",
+      contentType: "application/json",
+      cache: false,
+      success: function(result){
+        console.log(result.list)
+      }
+    });
+
+  })
+</script>

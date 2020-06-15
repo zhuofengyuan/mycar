@@ -164,34 +164,54 @@
 
     $.ajax({
       type: "get",
-      url: "/sys/product/p/" + getQueryVariable("id"),
+      url: "/cart/list",
       dataType: "json",
       contentType: "application/json",
       cache: false,
       async: false,
+      data:{record: getQueryVariable("id")},
       success: function (result) {
-        var product = result.product;
-        $("#name").text(product.name)
-        $("#name2").text(product.name)
-        $("#price").text("￥" + product.price + "元")
-        $("#yfje").text("￥" + Number(getQueryVariable("qty"))*product.price)
-        $("#zsp").text("￥" + Number(getQueryVariable("qty"))*product.price)
-        $("#img").attr("src", "/back-img/" + product.img)
-        $("#qty").text(" x" + getQueryVariable("qty"))
-        $("#qty1").text(getQueryVariable("qty"))
+        var data = result.data;
+        var html = '';
+        var totalPrice = 0
+        var size = 0
+        for(var i in data){
+          var product = data[i]
+          html += '<div class="to_right">\n' +
+          '      <h5><span>' + product.goodsName + '</span></h5>\n' +
+          '      <div class="yun1">\n' +
+          '        <img src="/back-img/' + product.img + '" class="yun"/>\n' +
+          '        <div class="mi">\n' +
+                  '<input type="hidden" class="cid" value="' + product.id + '">' +
+          '          <p><span>' + product.goodsName + '</span><span style="color: red;">￥' + product.goodsPrice + '元</span> <span> x' + product.qty
+                  + '</span> <span>有货</span></p>\n' +
+          '        </div>\n' +
+          '      </div>\n' +
+          '    </div>'
+          size += product.qty
+          totalPrice += product.goodsTotalPrice
+        }
+        $("#yfje").text("￥" + totalPrice)
+        $("#zsp").text("￥" + totalPrice)
+        $("qty1").text(size)
+        $(".top_1").html(html)
       }
     });
   })
 
   function order() {
+    var ids = []
+    $(".cid").each(function(i, v){
+      ids.push(Number($(v).val()))
+    })
       $.ajax({
         type: "get",
-        url: "/order/add/product",
+        url: "/order/add/cart",
         dataType: "json",
         contentType: "application/json",
         cache: false,
         async: false,
-        data: {ids: getQueryVariable("id"), qty: getQueryVariable("qty"), username: isLogin},
+        data: {ids: ids, username: isLogin},
         success: function (result) {
           alert("恭喜您，购买完成");
           setTimeout(function (){

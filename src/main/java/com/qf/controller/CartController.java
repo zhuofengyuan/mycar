@@ -24,8 +24,7 @@ public class CartController {
      */
     @GetMapping("/add")
     public @ResponseBody R addCart(Cart record){
-        cartService.insert(record);
-        return R.ok();
+        return R.ok().put("id", cartService.insert(record));
     }
 
     /**
@@ -56,8 +55,19 @@ public class CartController {
      * @return
      */
     @GetMapping("/update/qty")
-    public @ResponseBody R updateQty(Integer id, Integer qty){
-        cartService.updateQty(id, qty);
+    public @ResponseBody R updateQty(Integer id, Integer qty, Integer price){
+        cartService.updateQty(id, qty, price);
+        return R.ok();
+    }
+
+    /**
+     * 删除购物车项
+     * @param id
+     * @return
+     */
+    @GetMapping("/del/item")
+    public @ResponseBody R delItem(Integer id){
+        cartService.deleteByPrimaryKey(id);
         return R.ok();
     }
 }

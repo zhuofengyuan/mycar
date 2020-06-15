@@ -14,6 +14,9 @@
   <div class="center">
     <div class="fr" style="position: relative;">
       <div class="user">
+        <a href="/user/index.html" class="username">首页</a>
+      </div>
+      <div class="user">
         <a href="/user/qingbao" class="username">汽车情报站</a>
       </div>
       <div class="user">
@@ -120,10 +123,13 @@
       </div>
       <div class="xiadan ml20 mt20">
         <input class="jrgwc" type="button" name="jrgwc" value="立即选购" onclick="byCar()" />
-        <input class="jrgwc" type="button" name="jrgwc" value="加入购物车"/>
+        <input class="jrgwc" type="button" name="jrgwc" value="加入购物车" onclick="addCart()"/>
       </div>
     </div>
     <div class="clear"></div>
+    <input type="hidden" id="price4">
+    <input type="hidden" id="totalPrice">
+    <input type="hidden" id="img4">
   </div>
 </div>
 
@@ -132,8 +138,8 @@
 <script src="../public/libs/jquery.min.js"></script>
 <script>
 
-    $(function () {
-        var isLogin=sessionStorage.getItem("userName");
+  var isLogin=sessionStorage.getItem("userName");
+  $(function () {
         if (isLogin==null || isLogin==""){
         }else {
             $("#userName").html("欢迎您:"+isLogin);
@@ -144,14 +150,20 @@
       $("#add").click(function(){
         var i = Number($("#qty").val());
         $("#qty").val(i + 1)
+        $("#price3").text("总计：" + Number($("#price4").val()) * (i + 1) + "元");
+        $("#totalPrice").val(Number($("#price4").val()) * (i + 1));
       });
 
       $("#sub").click(function(){
         var i = Number($("#qty").val());
         if(i <= 1){
           $("#qty").val(1)
+          $("#price3").text("总计：" + Number($("#price4").val()) * 1 + "元");
+          $("#totalPrice").val(Number($("#price4").val()) * 1);
         } else {
           $("#qty").val(i - 1)
+          $("#price3").text("总计：" + Number($("#price4").val()) * (i - 1) + "元");
+          $("#totalPrice").val(Number($("#price4").val()) * (i - 1));
         }
       });
 
@@ -170,11 +182,14 @@
           $("#price").text(product.price + "元")
           $("#price2").text(product.price + "元")
           $("#price3").text("总计：" + product.price + "元")
+          $("#price4").val(product.price)
+          $("#totalPrice").val(product.price);
           $("#description").text(product.description)
 
           $("#img").attr("src", "/back-img/" + product.img)
           $("#img2").attr("src", "/back-img/" + product.img)
           $("#img3").attr("src", "/back-img/" + product.img)
+          $("#img4").val(product.img)
 
           new Swiper('.swiper-container', {
             slidesPerView: 5,
@@ -196,6 +211,30 @@
     function byCar() {
       var url = "/user/settlement.html?id=" + getQueryVariable("id") + "&qty=" + $("#qty").val();
       window.location.href = url;
+  }
+
+  function  addCart() {
+    $.ajax({
+      type: "get",
+      url: "/cart/add/item",
+      dataType: "json",
+      contentType: "application/json",
+      cache: false,
+      async: false,
+      data: {
+        goodsId: getQueryVariable("id"),
+        goodsName: $("#name").text(),
+        qty: $("#qty").val(),
+        goodsTotalPrice: $("#totalPrice").val(),
+        goodsPrice: $("#price4").val(),
+        username: isLogin,
+        img: $("#img4").val()
+      },
+      success: function (result) {
+        console.log(result)
+        alert("添加购物车成功！")
+      }
+    })
   }
 
     function getQueryVariable(variable)

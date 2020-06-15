@@ -6,7 +6,10 @@ import com.qf.pojo.*;
 import com.qf.service.CartService;
 import com.qf.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -20,12 +23,24 @@ public class CartServiceImpl implements CartService {
     CartItemMapper cartItemMapper;
     @Autowired
     SysUserService sysUserService;
+    @Autowired
+    DataSourceTransactionManager dataSourceTransactionManager;
+    @Autowired
+    TransactionDefinition transactionDefinition;
 
     @Override
     public int insert(Cart record) {
         int i = 0;
         if(cartMapper.countByUserId(record.getUserid()) == 0){
-            i = cartMapper.insert(record);
+            TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
+            cartMapper.insert(record);
+            i = record.getId();
+            dataSourceTransactionManager.commit(transactionStatus);
+        } else {
+            CartExample e = new CartExample();
+            e.createCriteria().andUseridEqualTo(record.getUserid());
+            Cart c = this.cartMapper.selectByExample(e).get(0);
+            i = c.getId();
         }
         return i;
     }
@@ -58,10 +73,21 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public int updateQty(Integer id, Integer qty) {
+    public int updateQty(Integer id, Integer qty, Integer price) {
         CartItem item = new CartItem();
         item.setId(id);
         item.setQty(qty);
+        item.setGoodsTotalPrice(price);
         return cartItemMapper.updateByPrimaryKeySelective(item);
+    }
+
+    @Override
+    public int deleteByPrimaryKey(Integer id) {
+        return cartItemMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int deleteByExample(CartItemExample example) {
+        return cartItemMapper.deleteByExample(example);
     }
 }

@@ -22,7 +22,17 @@ public class CartItem implements Serializable {
 
     private String username;
 
+    private String img;
+
     private static final long serialVersionUID = 1L;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public String getUsername() {
         return username;

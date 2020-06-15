@@ -96,7 +96,8 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.qf.pojo.Cart" >
+  <insert id="insert" parameterType="com.qf.pojo.Cart" keyColumn="id"
+          useGeneratedKeys="true" keyProperty="id">
     insert into cart (id, userid)
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER})
   </insert>

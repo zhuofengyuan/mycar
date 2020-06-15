@@ -10,6 +10,7 @@
     <result column="qty" property="qty" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="cart_id" property="cartId" jdbcType="INTEGER" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, goods_name, goods_id, goods_price, goods_total_price, qty, create_time, cart_id
+    id, goods_name, goods_id, goods_price, goods_total_price, qty, create_time, cart_id, img
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qf.pojo.CartItemExample" >
     select
@@ -105,10 +106,10 @@
   <insert id="insert" parameterType="com.qf.pojo.CartItem" >
     insert into cart_item (id, goods_name, goods_id, 
       goods_price, goods_total_price, qty, 
-      create_time, cart_id)
+      create_time, cart_id, img)
     values (#{id,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
       #{goodsPrice,jdbcType=INTEGER}, #{goodsTotalPrice,jdbcType=INTEGER}, #{qty,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{cartId,jdbcType=INTEGER})
+      #{createTime,jdbcType=TIMESTAMP}, #{cartId,jdbcType=INTEGER}, #{img,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qf.pojo.CartItem" >
     insert into cart_item
@@ -137,6 +138,9 @@
       <if test="cartId != null" >
         cart_id,
       </if>
+      <if test="img != null" >
+        img,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -162,6 +166,9 @@
       </if>
       <if test="cartId != null" >
         #{cartId,jdbcType=INTEGER},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
