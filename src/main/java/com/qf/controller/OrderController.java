@@ -1,6 +1,10 @@
 package com.qf.controller;
 
+import com.qf.dao.CartMapper;
+import com.qf.pojo.Cart;
+import com.qf.pojo.CartExample;
 import com.qf.pojo.CartItemExample;
+import com.qf.pojo.SysUser;
 import com.qf.service.CartService;
 import com.qf.service.OrderService;
 import com.qf.service.SysUserService;
@@ -24,6 +28,8 @@ public class OrderController {
     SysUserService sysUserService;
     @Autowired
     CartService cartService;
+    @Autowired
+    CartMapper cartMapper;
 
     /**
      * 根据购物车新增订单
@@ -32,8 +38,15 @@ public class OrderController {
     @GetMapping("/add/cart")
     public @ResponseBody R addCart(@RequestParam("ids[]") List<Integer> ids, String username){
         this.orderService.insertByCartItem(ids, sysUserService.findByUsername(username));
-        CartItemExample e = new CartItemExample();
-        this.cartService.deleteByExample(e);
+
+        //清空购物车
+        SysUser user = sysUserService.findByUsername(username);
+        CartExample e = new CartExample();
+        e.createCriteria().andUseridEqualTo(Integer.parseInt(user.getUserId().toString()));
+        Cart c = this.cartMapper.selectByExample(e).get(0);
+        CartItemExample eX = new CartItemExample();
+        eX.createCriteria().andCartIdEqualTo(c.getId());
+        this.cartService.deleteByExample(eX);
         return R.ok();
     }
 
