@@ -2,8 +2,9 @@ package com.qf.dao;
 
 import com.qf.pojo.CartItem;
 import com.qf.pojo.CartItemExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CartItemMapper {
     int countByExample(CartItemExample example);
