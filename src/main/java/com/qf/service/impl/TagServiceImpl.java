@@ -11,6 +11,7 @@ import com.qf.service.TagService;
 import com.qf.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,10 @@ public class TagServiceImpl implements TagService {
         TagExample example = new TagExample();
         if(queryDTO.getSort()!=null&&!queryDTO.getSort().equals("")){
             example.setOrderByClause("id "+queryDTO.getOrder());
+        }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andNameLike("%" + search + "%");
         }
         List<Tag> tags = tagMapper.selectByExample(example);
         PageInfo<Tag> info = new PageInfo<>(tags);
@@ -100,5 +105,10 @@ public class TagServiceImpl implements TagService {
             seriesData.add(map);
         }
         return R.ok().put("legendData",legendData).put("seriesData",seriesData);
+    }
+
+    @Override
+    public int updateCount(Tag tag) {
+        return this.tagMapper.updateByType(tag);
     }
 }

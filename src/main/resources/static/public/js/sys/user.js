@@ -83,16 +83,16 @@ var vm  = new Vue({
 
         },
         update: function (event) {
-            var id = 'userId';
-            var userId = getSelectedRow()[id];
+            console.log(getSelectedRow())
+            var userId = getSelectedRow()['username'];
             if(userId == null){
                 return ;
             }
 
-            $.get("../sys/user/info/"+userId, function(r){
+            $.get("/user/userInfo?userName="+userId, function(r){
                 vm.showList = false;
                 vm.title = "修改";
-
+                vm.user = r
             });
         },
         saveOrUpdate: function (event) {

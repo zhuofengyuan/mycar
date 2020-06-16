@@ -48,6 +48,10 @@ public class CarParamRootServiceImpl implements CarParamRootService {
         if(!StringUtils.isEmpty(sort)){
             example.setOrderByClause("id");
         }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andParamNameLike("%" + search + "%");
+        }
         List<CarParamsRoot> carParams = carParamsMapper.selectByExample(example);
         PageInfo<CarParamsRoot> info = new PageInfo<>(carParams);
         long total = info.getTotal();

@@ -55,7 +55,17 @@ public class TagController {
         return i>0?R.ok():R.error("更新失败");
     }
 
-
+    /**
+     * 点击量加1
+     * @return
+     */
+    @RequestMapping("/sys/tag/count")
+    public @ResponseBody R updateTagCount(String type){
+        Tag tag = new Tag();
+        tag.setType(Byte.valueOf(type));
+        int i = tagService.updateCount(tag);
+        return i>0?R.ok():R.error("更新失败");
+    }
 
 
 }

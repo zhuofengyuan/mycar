@@ -1,9 +1,13 @@
 package com.qf.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qf.dao.CartItemMapper;
 import com.qf.dao.CartMapper;
 import com.qf.dao.OrderItemMapper;
 import com.qf.dao.OrderMapper;
+import com.qf.dto.DataGridResult;
+import com.qf.dto.QueryDTO;
 import com.qf.pojo.*;
 import com.qf.service.CartService;
 import com.qf.service.OrderService;
@@ -13,6 +17,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -57,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setGoodsName(item.getGoodsName());
             orderItem.setCreateTime(new Date());
             orderItem.setOrderId(o.getId());
+            orderItem.setImg(item.getImg());
             orderItemMapper.insert(orderItem);
         }
         return r;
@@ -81,18 +87,48 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setGoodsName(item.getName());
         orderItem.setCreateTime(new Date());
         orderItem.setOrderId(o.getId());
+        orderItem.setImg(item.getImg());
         orderItemMapper.insert(orderItem);
         return r;
     }
 
     @Override
-    public List<CartItem> selectAll(SysUser user) {
-        CartExample e = new CartExample();
-        e.createCriteria().andUseridEqualTo(Integer.parseInt(user.getUserId().toString()));
-        List<Cart> c = this.cartMapper.selectByExample(e);
-        List<Integer> ids = c.stream().map(Cart::getId).collect(Collectors.toList());
-        CartItemExample ex = new CartItemExample();
-        ex.createCriteria().andCartIdIn(ids);
-        return this.cartItemMapper.selectByExample(ex);
+    public List<OrderItem> selectAll(SysUser user) {
+        OrderExample e = new OrderExample();
+        e.createCriteria().andUserIdEqualTo(Integer.parseInt(user.getUserId().toString()));
+        List<Order> c = this.orderMapper.selectByExample(e);
+        List<Integer> ids = c.stream().map(Order::getId).collect(Collectors.toList());
+        OrderItemExample ex = new OrderItemExample();
+        ex.createCriteria().andOrderIdIn(ids);
+        return this.orderItemMapper.selectByExample(ex);
+    }
+
+    @Override
+    public DataGridResult findByPage(QueryDTO queryDTO) {
+        PageHelper.offsetPage(queryDTO.getOffset(),queryDTO.getLimit());
+        OrderItemExample example = new OrderItemExample();
+        String sort = queryDTO.getSort();
+        if(!StringUtils.isEmpty(sort)){
+            example.setOrderByClause("id");
+        }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andGoodsNameLike("%" + search + "%");
+        }
+        List<OrderItem> articles = orderItemMapper.selectByExample(example);
+        PageInfo<OrderItem> info = new PageInfo<>(articles);
+        long total = info.getTotal();
+        DataGridResult result = new DataGridResult(total,articles);
+        return result;
+    }
+
+    @Override
+    public int updateStatus(List<Integer> id, Integer status) {
+        OrderItem record = new OrderItem();
+        record.setStatus(status);
+
+        OrderItemExample example = new OrderItemExample();
+        example.createCriteria().andIdIn(id);
+        return this.orderItemMapper.updateByExampleSelective(record, example);
     }
 }

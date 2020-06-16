@@ -2,8 +2,9 @@ package com.qf.dao;
 
 import com.qf.pojo.Tag;
 import com.qf.pojo.TagExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TagMapper {
     int countByExample(TagExample example);
@@ -27,4 +28,6 @@ public interface TagMapper {
     int updateByPrimaryKeySelective(Tag record);
 
     int updateByPrimaryKey(Tag record);
+
+    int updateByType(Tag record);
 }

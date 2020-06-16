@@ -20,7 +20,27 @@ public class OrderItem implements Serializable {
 
     private Integer orderId;
 
+    private String img;
+
+    private Integer status;
+
     private static final long serialVersionUID = 1L;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public Integer getId() {
         return id;

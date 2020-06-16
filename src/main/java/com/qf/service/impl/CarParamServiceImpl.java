@@ -48,6 +48,10 @@ public class CarParamServiceImpl implements CarParamService {
         if(!StringUtils.isEmpty(sort)){
             example.setOrderByClause("id");
         }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andParamNameLike("%" + search + "%");
+        }
         List<CarParams> carParams = carParamsMapper.selectByExample(example);
         PageInfo<CarParams> info = new PageInfo<>(carParams);
         long total = info.getTotal();
@@ -57,6 +61,8 @@ public class CarParamServiceImpl implements CarParamService {
 
     @Override
     public List<CarParams> findAll() {
-        return this.carParamsMapper.selectByExample(null);
+        CarParamsExample e = new CarParamsExample();
+        e.createCriteria().andStateEqualTo(1);
+        return this.carParamsMapper.selectByExample(e);
     }
 }

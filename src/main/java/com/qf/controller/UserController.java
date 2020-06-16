@@ -5,7 +5,9 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.qf.dto.DataGridResult;
 import com.qf.dto.QueryDTO;
 import com.qf.dto.UserDTO;
+import com.qf.pojo.Cart;
 import com.qf.pojo.SysUser;
+import com.qf.service.CartService;
 import com.qf.service.SysUserService;
 import com.qf.utils.MD5Utils;
 import com.qf.utils.R;
@@ -61,7 +63,8 @@ public class UserController {
             e.printStackTrace();
         }
     }
-
+    @Autowired
+    CartService cartService;
     @RequestMapping("/sys/login")
     @ResponseBody
     public R login(@RequestBody UserDTO userDTO){
@@ -77,6 +80,12 @@ public class UserController {
             token.setRememberMe(true);
         }
         subject.login(token);
+
+        //初始化购物车
+        SysUser u = this.sysUserService.findByUsername(userDTO.getUsername());
+        Cart c = new Cart();
+        c.setUserid(Integer.valueOf(u.getUserId().toString()));
+        cartService.insert(c);
         //会去调用自定义的realm
         return R.ok();
     }

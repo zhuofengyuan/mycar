@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>个人中心</title>
+  <link rel="stylesheet" href="css/iconfont.css">
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="stylus/my_orders.css">
 </head>
@@ -22,6 +23,9 @@
       </div>
       <div class="user">
         <a href="/user/youhui" class="username">新车优惠</a>
+      </div>
+      <div class="user" style="color:red;width:200px">
+        客服电话：12235037684
       </div>
     </div>
     <div class="fr" style="position: relative;">
@@ -83,7 +87,7 @@
         </ul>
       </div>
     </div>
-    <div class="rtcont fr" id="orders">
+    <div class="rtcont fr" id="orders" style="height: 100%;">
       <div class="ddzxbt">交易订单</div>
 <!--      <div class="ddxq">-->
 <!--        <div class="ddspt fl"><img src="./image/111.png" style="width: 100px;height: 100px" alt=""></div>-->
@@ -140,8 +144,31 @@
       dataType: "json",
       contentType: "application/json",
       cache: false,
-      success: function(result){
-        console.log(result.list)
+      success: function(r){
+          var html = '';
+          for(var i in r.list){
+            var result = r.list[i]
+
+            var status = '待处理'
+            if(result.status == 2){
+              status = '已发货'
+            } else if(result.status == 3){
+              status = "已到货"
+            }
+            html += '<div class="ddxq">\n' +
+                    '        <div class="ddspt fl"><img src="/back-img/' + result.img + '" style="width: 100px;height: 100px" alt=""></div>\n' +
+                    '        <div class="ddbh fl">订单号:' + result.id + '</div>\n' +
+                    '        <div class="ztxx fr">\n' +
+                    '          <ul>\n' +
+                    '            <li>下单数量：' + result.qty + '</li>\n' +
+                    '            <li>￥' + result.goodsTotalPrice + '</li>\n' +
+                    '            <li style="width: 200px;">' + result.createTime + '</li>\n' +
+                    '            <li>' + status + '</li>\n' +
+                    '            <div class="clear"></div>\n' +
+                    '          </ul>\n' +
+                    '        </div></div>'
+          }
+          $("#orders").append(html)
       }
     });
 

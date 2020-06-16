@@ -82,6 +82,10 @@ public class ActivityServiceImpl implements ActivityService {
         if(!StringUtils.isEmpty(sort)){
             example.setOrderByClause("id");
         }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andTitleLike("%" + search + "%");
+        }
         List<ActivityWithBLOBs> activityWithBLOBs = activityMapper.selectByExampleWithBLOBs(example);
         for (ActivityWithBLOBs activityWithBLOB : activityWithBLOBs) {
             ActivityDTO activityDTO = new ActivityDTO();

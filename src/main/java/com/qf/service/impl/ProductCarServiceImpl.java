@@ -53,6 +53,10 @@ public class ProductCarServiceImpl implements ProductCarService {
         if(!StringUtils.isEmpty(sort)){
             example.setOrderByClause("id");
         }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andNameLike("%" + search + "%");
+        }
         List<ProductWithBLOBs> productWithBLOBs = productMapper.selectByExampleWithBLOBs(example);
         PageInfo<ProductWithBLOBs> info = new PageInfo<>(productWithBLOBs);
         long total = info.getTotal();

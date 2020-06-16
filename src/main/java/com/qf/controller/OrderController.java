@@ -1,6 +1,8 @@
 package com.qf.controller;
 
 import com.qf.dao.CartMapper;
+import com.qf.dto.DataGridResult;
+import com.qf.dto.QueryDTO;
 import com.qf.pojo.Cart;
 import com.qf.pojo.CartExample;
 import com.qf.pojo.CartItemExample;
@@ -70,6 +72,28 @@ public class OrderController {
     @GetMapping("/list")
     public @ResponseBody R list(String username){
         return R.ok().put("list", this.orderService.selectAll(sysUserService.findByUsername(username)));
+    }
+
+    /**
+     * 后台分页
+     * @param queryDTO
+     * @return
+     */
+    @RequestMapping("/list/sys")
+    public @ResponseBody DataGridResult page(QueryDTO queryDTO){
+        return orderService.findByPage(queryDTO);
+    }
+
+    /**
+     * 更新订单状态
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping("/update/status")
+    public @ResponseBody R updateStatus(@RequestParam("ids[]") List<Integer> id, Integer status){
+        orderService.updateStatus(id, status);
+        return R.ok();
     }
 }
 

@@ -23,4 +23,5 @@ public interface TagService {
 
     public R findPieData();
 
+    public int updateCount(Tag tag);
 }

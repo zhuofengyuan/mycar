@@ -32,6 +32,7 @@ var vm = new Vue({
     data:{
         showList: true,
         title: null,
+        sites: [],
         tag:{}
     },
     methods:{
@@ -73,6 +74,9 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.tag = {parentName:null,parentId:0,type:1,orderNum:0};
+            $.get("../sys/paramsroot/list?limit=1000", function(r){
+                vm.sites = r.rows;
+            });
         },
         update: function (event) {
             var id = 'id';
@@ -80,6 +84,9 @@ var vm = new Vue({
             if(id == null){
                 return ;
             }
+            $.get("../sys/paramsroot/list?limit=1000", function(r){
+                vm.sites = r.rows;
+            });
 
             $.get("../sys/tag/info/"+id, function(r){
                 vm.showList = false;

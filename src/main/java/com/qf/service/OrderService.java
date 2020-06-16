@@ -1,6 +1,8 @@
 package com.qf.service;
 
-import com.qf.pojo.CartItem;
+import com.qf.dto.DataGridResult;
+import com.qf.dto.QueryDTO;
+import com.qf.pojo.OrderItem;
 import com.qf.pojo.SysUser;
 
 import java.util.List;
@@ -11,5 +13,9 @@ public interface OrderService {
 
     int insertByProduct(Integer ids, Integer qty, SysUser user);
 
-    List<CartItem> selectAll(SysUser user);
+    List<OrderItem> selectAll(SysUser user);
+
+    DataGridResult findByPage(QueryDTO queryDTO);
+
+    int updateStatus(List<Integer> id, Integer status);
 }

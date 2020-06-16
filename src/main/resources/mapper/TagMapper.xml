@@ -230,6 +230,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateByType" parameterType="com.qf.pojo.Tag" >
+    update tag SET click_count = click_count + 1 where `type` = #{type,jdbcType=INTEGER}
+  </update>
   <update id="updateByPrimaryKey" parameterType="com.qf.pojo.Tag" >
     update tag
     set name = #{name,jdbcType=VARCHAR},

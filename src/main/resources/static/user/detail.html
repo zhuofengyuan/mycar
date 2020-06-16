@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>小米6立即购买-小米商城</title>
+  <title>汽车详情</title>
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/iconfont.css">
   <link rel="stylesheet" href="css/swiper.min.css">
@@ -25,10 +25,18 @@
       <div class="user">
         <a href="/user/youhui" class="username">新车优惠</a>
       </div>
+      <div class="user" style="color:red;width:200px">
+        客服电话：12235037684
+      </div>
     </div>
     <div class="fr" style="position: relative;">
       <div class="user">
         <ul class="selector">
+          <li>
+            <a href="/user/order">
+              我的订单
+            </a>
+          </li>
           <li>
             <a href="/user/personal">
               个人中心
@@ -146,6 +154,19 @@
             $("#isLogin").css("display","none");
             $("#out").css("display","block");
         }
+
+    $.ajax({
+      type: "get",
+      url: "/sys/tag/count",
+      dataType: "json",
+      contentType: "application/json",
+      cache: false,
+      async: false,
+      data:{'type': getQueryVariable("id")},
+      success: function (result) {
+
+      }
+    });
 
       $("#add").click(function(){
         var i = Number($("#qty").val());

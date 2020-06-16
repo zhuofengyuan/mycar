@@ -73,7 +73,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

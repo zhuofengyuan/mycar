@@ -10,6 +10,7 @@ import com.qf.pojo.CarParamTypeExample;
 import com.qf.service.CarParamTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -41,7 +42,9 @@ public class CarParamTypeServiceImpl implements CarParamTypeService {
 
     @Override
     public List<CarParamType> findAll() {
-        return carParamTypeMapper.selectByExample(null);
+        CarParamTypeExample e = new CarParamTypeExample();
+        e.createCriteria().andStateEqualTo(1);
+        return carParamTypeMapper.selectByExample(e);
     }
 
     @Override
@@ -50,6 +53,10 @@ public class CarParamTypeServiceImpl implements CarParamTypeService {
         CarParamTypeExample example = new CarParamTypeExample();
         if(queryDTO.getSort()!=null&&!queryDTO.getSort().equals("")){
             example.setOrderByClause("id");
+        }
+        String search = queryDTO.getSearch();
+        if(!StringUtils.isEmpty(search)){
+            example.createCriteria().andTypeNameLike("%" + search + "%");
         }
         List<CarParamType> carParamTypes = carParamTypeMapper.selectByExample(example);
         PageInfo<CarParamType> info = new PageInfo<>(carParamTypes);
