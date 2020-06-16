@@ -210,38 +210,38 @@
           </div>
         </a>
       </li>
-      <li>
-        <a href="https://qq.com" target="_blank">
-          <img src="./image/444.png" alt=""/>
-          <p class="name">奔驰-AMG S 63</p>
-          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>
-          <p class="price">月供¥1,058起*</p>
-        </a>
-      </li>
-      <li>
-        <a href="https://hao123.com" target="_blank">
-          <img src="./image/555.png" alt=""/>
-          <p class="name">『宝马iX3』</p>
-          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>
-          <p class="price">月供¥3499元起</p>
-        </a>
-      </li>
-      <li>
-        <a href="https://v.qq.com" target="_blank">
-          <img src="./image/666.png" alt=""/>
-          <p class="name">『别克-君威』</p>
-          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>
-          <p class="price">月供¥999元起</p>
-        </a>
-      </li>
-      <li>
-        <a href="https://taobao.com" target="_blank">
-          <img src="./image/777.png" alt=""/>
-          <p class="name">『五菱宏光』</p>
-          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>
-          <p class="price">月供¥666元起</p>
-        </a>
-      </li>
+<!--      <li>-->
+<!--        <a href="https://qq.com" target="_blank">-->
+<!--          <img src="./image/444.png" alt=""/>-->
+<!--          <p class="name">奔驰-AMG S 63</p>-->
+<!--          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>-->
+<!--          <p class="price">月供¥1,058起*</p>-->
+<!--        </a>-->
+<!--      </li>-->
+<!--      <li>-->
+<!--        <a href="https://hao123.com" target="_blank">-->
+<!--          <img src="./image/555.png" alt=""/>-->
+<!--          <p class="name">『宝马iX3』</p>-->
+<!--          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>-->
+<!--          <p class="price">月供¥3499元起</p>-->
+<!--        </a>-->
+<!--      </li>-->
+<!--      <li>-->
+<!--        <a href="https://v.qq.com" target="_blank">-->
+<!--          <img src="./image/666.png" alt=""/>-->
+<!--          <p class="name">『别克-君威』</p>-->
+<!--          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>-->
+<!--          <p class="price">月供¥999元起</p>-->
+<!--        </a>-->
+<!--      </li>-->
+<!--      <li>-->
+<!--        <a href="https://taobao.com" target="_blank">-->
+<!--          <img src="./image/777.png" alt=""/>-->
+<!--          <p class="name">『五菱宏光』</p>-->
+<!--          <p class="discount">5月20日-6月18日享花呗12期分期免息</p>-->
+<!--          <p class="price">月供¥666元起</p>-->
+<!--        </a>-->
+<!--      </li>-->
     </ul>
   </div>
 
@@ -330,6 +330,33 @@
         $("#isLogin").css("display","none");
         $("#out").css("display","block");
     }
+
+   //菜单
+   $.ajax({
+     type: "get",
+     url: "/sys/activity/list?limit=1000",
+     dataType: "json",
+     contentType: "application/json",
+     cache: false,
+     async: false,
+     success: function (result) {
+      var r = result.rows;
+      var html = '';
+      for(var i in r){
+        if(i < 4){
+          html += '<li>\n' +
+                  '        <a href="' + r[i].link + '" target="_blank">\n' +
+                  '          <img src="/back-img/' + r[i].coverPic + '" alt=""/>\n' +
+                  '          <p class="name">' + r[i].title + '</p>\n' +
+                  '          <p class="discount">' + r[i].description + '</p>\n' +
+                  '          <p class="price">' + r[i].seoKeywords + '</p>\n' +
+                  '        </a>\n' +
+                  '      </li>'
+        }
+      }
+      $(".time").parent().append(html)
+     }
+   })
 
     //菜单
    $.ajax({

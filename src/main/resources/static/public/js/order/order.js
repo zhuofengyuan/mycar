@@ -25,6 +25,8 @@ $(function(){
             { title: '单价', field: 'goodsPrice', formatter: function(value, row, index) {return "￥" + value}},
             { title: '下单数量', field: 'qty'},
             { title: '总金额', field: 'goodsTotalPrice', formatter: function(value, row, index) {return "￥" + value}},
+            { title: '下单人', field: 'username'},
+            { title: '下单时间', field: 'createTime'},
             { title: '状态', field: 'status', formatter: function(value, row, index) {
                 var status = '待处理'
                 if(row.status == 2){

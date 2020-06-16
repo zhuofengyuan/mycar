@@ -8,6 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class StaticConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/back-img/**").addResourceLocations("file:F:/certs/");
+        registry.addResourceHandler("/back-img/**").addResourceLocations("file:E:/certs/");
     }
 }

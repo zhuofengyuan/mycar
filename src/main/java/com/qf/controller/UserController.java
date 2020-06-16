@@ -188,6 +188,8 @@ public class UserController {
       SysUser user=sysUserService.findByUsername(userName);
       System.out.println(JSON.toJSONString(user));
         try {
+            response.setCharacterEncoding("utf-8");    //设置 HttpServletResponse使用utf-8编码
+            response.setHeader("Content-Type", "text/html;charset=utf-8");  //设置响应头的编码
             response.getWriter().append(JSON.toJSONString(user));
         } catch (IOException e) {
             e.printStackTrace();
@@ -209,6 +211,16 @@ public class UserController {
             e.printStackTrace();
         }
 
+    }
+    @RequestMapping("/sys/user/password")
+    public @ResponseBody R updatePs(String password, String newPassword){
+        SysUser user = ShiroUtils.getUserEntity();
+        String orgPass = MD5Utils.md5(password,user.getUsername(),1024);
+        if(!user.getPassword().equals(orgPass)){
+            return R.error("原密码错误");
+        }
+        sysUserService.updatePassword(user.getUsername(), MD5Utils.md5(newPassword,user.getUsername(),1024));
+        return R.ok();
     }
     @RequestMapping("/user/updatePersonal")
     @ResponseBody

@@ -67,6 +67,9 @@
   <sql id="Base_Column_List" >
     id, address, user_id
   </sql>
+  <select id="selectNameByOrderId" resultType="String" parameterType="Integer">
+    SELECT u.`username` FROM `order` o LEFT JOIN sys_user u ON u.`user_id` = o.`user_id` WHERE o.`id` = #{id}
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qf.pojo.OrderExample" >
     select
     <if test="distinct" >

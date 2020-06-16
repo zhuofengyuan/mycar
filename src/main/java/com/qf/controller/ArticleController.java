@@ -64,7 +64,7 @@ public class ArticleController {
         //得到文件名称
         String filename = multipartFile.getOriginalFilename();
         //上传的目的地,不做分布式，只是存储在本质,同时不考虑文件名重复的问题
-        File dest = new File("F:\\certs\\"+filename);
+        File dest = new File("E:\\certs\\"+filename);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }

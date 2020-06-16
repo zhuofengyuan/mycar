@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
             example.createCriteria().andGoodsNameLike("%" + search + "%");
         }
         List<OrderItem> articles = orderItemMapper.selectByExample(example);
+        articles.forEach(e -> e.setUsername(this.orderMapper.selectNameByOrderId(e.getOrderId())));
         PageInfo<OrderItem> info = new PageInfo<>(articles);
         long total = info.getTotal();
         DataGridResult result = new DataGridResult(total,articles);

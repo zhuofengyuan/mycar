@@ -2,6 +2,7 @@ $(function(){
     var option = {
         url: '../sys/paramsroot/list',
         pagination: true,	//显示分页条
+        pageList : [ 10, 20, 50, 100],
         sidePagination: 'server',//服务器端分页
         showRefresh: true,  //显示刷新按钮
         search: true,
